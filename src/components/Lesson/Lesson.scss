@@ -1,0 +1,23 @@
+.Lesson {
+  background: #000;
+  color: #FFF;
+  height: auto;
+  .title-block {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0.5rem;
+  }
+
+  .lesson-body {
+    
+    .description-block {
+      margin: 1rem 0.5rem;
+    }
+  }
+
+  &.active {
+    .lesson-body {
+      // margin-top: 0%;
+    }
+  }
+}

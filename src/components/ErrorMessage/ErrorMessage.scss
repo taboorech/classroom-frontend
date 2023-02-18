@@ -1,0 +1,10 @@
+.Error-message {
+  background: #d48989;
+  color: #db2b2b;
+  border: 1px solid #db2b2b;
+  border-radius: 5px;
+  margin: 0.5rem 0;
+  p::first-letter {
+    text-transform: uppercase;
+  }
+}

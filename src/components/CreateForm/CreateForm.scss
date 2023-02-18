@@ -1,0 +1,20 @@
+.create-form {
+  position: absolute;
+  background: #FFF;
+  top: -100%;
+  border-bottom: 1px solid #afaeae4d;
+  border-radius: 0 0 0 5px;
+  transition: all ease-in-out .7s;
+  z-index: 3;
+  &.open {
+    top: 0;
+    // margin-top: 0;
+  }
+  button {
+    margin-bottom: 1rem;
+    margin-top: 0;
+  }
+  @media (max-width: 600px) {
+    border-radius: 0;
+  }
+}

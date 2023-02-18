@@ -1,0 +1,17 @@
+nav {
+  .brand-logo {
+    @media(min-width: 992px) {
+      margin-left: 2rem;
+    }
+  }
+  ul {
+    margin-right: 2rem;
+  }
+}
+
+.sidenav {
+  h5 {
+    margin-left: 1rem;
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,26 @@
+.card {
+  .card-content {
+    height: 7rem;
+  }
+  .card-action {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 12rem;
+    overflow: hidden;
+    @media (max-width: 600px) {
+      height: 4rem;
+    }
+    a.missed {
+      color: #FFF !important;
+      margin-bottom: 1rem;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+}
