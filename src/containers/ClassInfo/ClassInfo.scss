@@ -1,14 +1,50 @@
+.update-class-block {
+  height: 1rem;
+  margin-bottom: -1rem;
+}
+
 .general-info {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 0;
   // align-items: center;
   @media (min-width: 600px) {
     border-radius: 0 0 5px 5px;
   }
+  
+  .tools {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    padding-right: 0.5rem;
+    margin-bottom: 0;
+    i {
+      cursor: pointer;
+    }
+  }
+
+  // h4 {
+  //   margin-top: 0;
+  // }
+
   p {
     display: flex;
     justify-content: space-between;
     margin-top: 0;
+    a {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+#lessonsBlock {
+  .create-lesson-block {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .collection {
+    border: none;
   }
 }

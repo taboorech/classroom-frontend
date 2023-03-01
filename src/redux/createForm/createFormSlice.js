@@ -8,10 +8,13 @@ export const createFormSlice = createSlice({
   reducers: {
     openForm: (state) => {
       state.open = !state.open;
+    },
+    closeForm: (state) => {
+      state.open = false;
     }
   },
 })
 
-export const { openForm } = createFormSlice.actions;
+export const { openForm, closeForm } = createFormSlice.actions;
 
 export default createFormSlice.reducer;

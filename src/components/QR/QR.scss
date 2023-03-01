@@ -1,0 +1,53 @@
+.QR {
+  display: none;
+  &.open {
+    display: flex;
+  }
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  width: 100%;  
+  &.enter {
+    div {
+      opacity: 0;
+    }
+  }
+  &.enter-done {
+    div {
+      opacity: 1;
+      transition: opacity .5s;
+    }
+  }
+  &.exit {
+    div {
+      opacity: 1;
+    }
+  }
+  &.exit-active {
+    div {
+      opacity: 0;
+      transition: opacity .5s;
+    }
+  }
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    height: 50%;
+    z-index: 100;
+    justify-content: center;
+    background: #FFF;
+    h5 {
+      i {
+        cursor: pointer;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      width: 90%;
+    }
+  }
+}

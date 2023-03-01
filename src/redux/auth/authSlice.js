@@ -19,6 +19,8 @@ export const signUp = createAsyncThunk(
     return await mainInstance.put('/auth/signUp', {
       email: data.email,
       login: data.login,
+      surname: data.surname,
+      name: data.name,
       password: data.password
     })
     .then((response) => response.data)
@@ -45,6 +47,8 @@ export const authSlice = createSlice({
     regPassword: '',
     confirmPassword: '',
     regLogin: '',
+    surname: '',
+    name: '',
     error: []
   },
   reducers: {
@@ -66,6 +70,12 @@ export const authSlice = createSlice({
     changeRegLogin: (state, action) => {
       state.regLogin = action.payload;
     },
+    changeSurname: (state, action) => {
+      state.surname = action.payload;
+    },
+    changeName: (state, action) => {
+      state.name = action.payload;
+    }
   },
   extraReducers: builder => {
     builder
@@ -77,6 +87,8 @@ export const authSlice = createSlice({
       state.regPassword = '';
       state.confirmPassword = '';
       state.regLogin = '';
+      state.surname = '';
+      state.name = '';
       localStorage.setItem('accessToken', action.payload.accessToken);
       localStorage.setItem('refreshToken', action.payload.refreshToken);
       
@@ -95,6 +107,8 @@ export const authSlice = createSlice({
       state.regPassword = '';
       state.confirmPassword = '';
       state.regLogin = '';
+      state.surname = '';
+      state.name = '';
     })
     .addCase(signUp.rejected, (state, action) => {
       if(Array.isArray(action.payload) && action.payload.length > 1) {
@@ -111,6 +125,6 @@ export const authSlice = createSlice({
   }
 })
 
-export const { changeEmail, changeRegEmail, changePassword, changeRegPassword, changeConfirmPassword, changeRegLogin } = authSlice.actions;
+export const { changeEmail, changeRegEmail, changePassword, changeRegPassword, changeConfirmPassword, changeRegLogin, changeSurname, changeName } = authSlice.actions;
 
 export default authSlice.reducer;

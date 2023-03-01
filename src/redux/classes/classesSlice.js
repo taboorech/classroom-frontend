@@ -22,12 +22,22 @@ export const createClass = createAsyncThunk(
   }
 )
 
+export const connectToClass = createAsyncThunk(
+  'classes/connectToClass',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.post(`/classes/connect?accessToken=${data.accessToken}`)
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const classesSlice = createSlice({
   name: 'classes',
   initialState: {
     classes: [],
     createClassTitle: '',
     createClassDescription: '',
+    accessTokenInput: '',
     error: []
   },
   reducers: {
@@ -42,19 +52,24 @@ export const classesSlice = createSlice({
     changeDesription: (state, action) => {
       state.createClassDescription = action.payload;
     },
+    changeAccessTokenInput: (state, action) => {
+      state.accessTokenInput = action.payload;
+    },
+    clearErrors: (state) => {
+      state.error = [];
+    }
   },
   extraReducers: builder => {
     builder
     .addCase(getClasses.fulfilled, (state, action) => {
       state.classes = [...action.payload];
-      // action.payload.map((obj) => {
-      //   return state.classes.push(obj);
-      // })
+      state.error = [];
     })
     .addCase(getClasses.rejected, (state, action) => {
       if(Array.isArray(action.payload) && action.payload.length > 1) {
         state.error = [...action.payload];
       } else {
+        state.error = [];
         state.error.push(action.payload);
       }
     })
@@ -67,12 +82,24 @@ export const classesSlice = createSlice({
       if(Array.isArray(action.payload) && action.payload.length > 1) {
         state.error = [...action.payload];
       } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
+    .addCase(connectToClass.fulfilled, (state, action) => {
+      state.classes.push({...action.payload});
+    })
+    .addCase(connectToClass.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
         state.error.push(action.payload);
       }
     })
   }
 })
 
-export const { setData, changeTitle, changeDesription } = classesSlice.actions;
+export const { setData, changeTitle, changeDesription, changeAccessTokenInput, clearErrors } = classesSlice.actions;
 
 export default classesSlice.reducer;

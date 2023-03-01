@@ -1,5 +1,8 @@
 .create-class-block {
+  display: flex;
+  justify-content: flex-end;
   .create-class-button {
     margin-top: 2rem;
+    margin-right: 2rem;
   }
 }

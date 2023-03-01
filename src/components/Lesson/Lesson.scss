@@ -1,23 +1,58 @@
 .Lesson {
-  background: #000;
-  color: #FFF;
   height: auto;
+  border-radius: 0 0 7px 0;
+  border: none;
   .title-block {
     display: flex;
+    position: relative;
+    z-index: 2;
     align-items: center;
     margin: 1rem 0.5rem;
+    padding: 0 0.5rem 0 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all .7s;
   }
 
   .lesson-body {
-    
-    .description-block {
-      margin: 1rem 0.5rem;
+    position: relative;
+    height: auto;
+    overflow: hidden;
+    z-index: 1;
+    margin-top: 0;
+    .lesson-body-content {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition-duration: 2s;
+      margin-top: -100%;
+      .descrription-block {
+        text-align: justify;
+      }
+      .attachments-block {
+        display: flex;
+        margin-top: 1rem;
+        flex-direction: column;
+        text-align: justify;
+      }
+      .button-block {
+        margin-top: 2rem;
+        margin-left: 0rem;
+        margin-bottom: 0;
+      }
     }
   }
 
   &.active {
+    .title-block {
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid red;
+    }
     .lesson-body {
-      // margin-top: 0%;
+      .lesson-body-content {
+        margin: 0 0 1rem 0.5rem;
+        transition-duration: .7s;
+      }
     }
   }
 }

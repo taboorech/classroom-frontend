@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import M from "materialize-css";
 import AuthForm from "../../components/AuthForm/AuthForm";
-import { changeEmail, changeRegEmail, changePassword, changeRegPassword, changeConfirmPassword, changeRegLogin, signIn, signUp } from "../../redux/auth/authSlice";
+import { changeEmail, changeRegEmail, changePassword, changeRegPassword, changeConfirmPassword, changeRegLogin, signIn, signUp, changeSurname, changeName } from "../../redux/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
@@ -11,7 +11,7 @@ export default function Auth(props) {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const registerValidate = () => auth.regEmail !== '' && auth.regLogin !== '' && auth.regPassword !== ''  && auth.regPassword === auth.confirmPassword;
+  const registerValidate = () => auth.regEmail !== '' && auth.regLogin !== '' && auth.regPassword !== ''  && auth.regPassword === auth.confirmPassword && auth.surname !== '' && auth.name !== '';
 
   useEffect(() => {
     if(auth.isAuth) {
@@ -51,7 +51,7 @@ export default function Auth(props) {
           </AuthForm>
         </div>
         <div id="register" className="col s10 offset-s1 m8 offset-m2 l6 offset-l3">
-          <AuthForm btnName = {'Registration'} onBtnClick={registerValidate() ? () => dispatch(signUp({ email: auth.regEmail, login: auth.regLogin, password: auth.regPassword})) : null } >
+          <AuthForm btnName = {'Registration'} onBtnClick={registerValidate() ? () => dispatch(signUp({ email: auth.regEmail, login: auth.regLogin, surname: auth.surname, name: auth.name, password: auth.regPassword})) : null } >
             <div className="input-field col s12">
               <input id="regEmail" type="email" value={auth.regEmail} className="validate" onChange={(event) => dispatch(changeRegEmail(event.target.value))} required />
               <label htmlFor="regEmail">Email</label>
@@ -60,6 +60,16 @@ export default function Auth(props) {
             <div className="input-field col s12">
               <input id="regLogin" type="text" value={auth.regLogin} className="validate" onChange={(event) => dispatch(changeRegLogin(event.target.value))} required />
               <label htmlFor="regLogin">Login</label>
+            </div>
+            <div>
+              <div className="input-field col s6">
+                <input id="surname" value={auth.surname} onChange={(event) => dispatch(changeSurname(event.target.value))} type="text" className="validate" />
+                <label htmlFor="surname">Surname</label>
+              </div>
+              <div className="input-field col s6">
+                <input id="name" type="text" value={auth.name} onChange={(event) => dispatch(changeName(event.target.value))} className="validate" />
+                <label htmlFor="name">Name</label>
+              </div>
             </div>
             <div className="input-field col s12">
               <input id="regPassword" type="password" value={auth.regPassword} className="validate" minLength="5" onChange={(event) => dispatch(changeRegPassword(event.target.value))} required />
