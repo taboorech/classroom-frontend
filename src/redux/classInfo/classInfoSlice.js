@@ -52,6 +52,39 @@ export const removeFromClassroom = createAsyncThunk(
   }
 )
 
+export const getMarks = createAsyncThunk(
+  'classInfo/getMarks',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.get(`/classes/${data.id}/gradeBook`)
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
+export const makeAssessment = createAsyncThunk(
+  'classInfo/makeAssessment',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.put(`/classes/${data.id}/${data.lessonId}/marks`, {
+      memberId: data.memberId,
+      mark: data.mark
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
+export const updateAssessment = createAsyncThunk(
+  'classInfo/updateAssessment',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.patch(`/classes/${data.id}/${data.lessonId}/marks`, {
+      markId: data.markId,
+      mark: data.mark
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const classInfoSlice = createSlice({
   name: 'classInfo',
   initialState: {
@@ -75,6 +108,9 @@ export const classInfoSlice = createSlice({
     },
     changeDescriptionInput: (state, action) => {
       state.descriptionInput = action.payload;
+    },
+    changeMark: (state, action) => {
+      state[action.payload.id] = action.payload.value;
     }
   },
   extraReducers: builder => {
@@ -158,9 +194,49 @@ export const classInfoSlice = createSlice({
         state.error.push(action.payload);
       }
     })
+    .addCase(getMarks.fulfilled, (state, action) => {
+      state.info.members.map((member) => {
+        return state.info.lessons.map((lesson) => {
+          const mark = action.payload.find((mark) => mark.lesson === lesson._id && mark.user === member._id);
+          if(!!mark) {
+            return state[`mark${lesson._id + member._id}Value`] = mark.mark;
+          } else {
+            return state[`mark${lesson._id + member._id}Value`] = '';
+          }
+        })
+      })
+      state.marks = [...action.payload];
+    })
+    .addCase(getMarks.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
+    .addCase(makeAssessment.fulfilled, (state, action) => {
+      state.marks.push(action.payload);
+    })
+    .addCase(makeAssessment.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
+    .addCase(updateAssessment.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
   }
 })
 
-export const { setOpen, changeTitleInput, changeDescriptionInput } = classInfoSlice.actions;
+export const { setOpen, changeTitleInput, changeDescriptionInput, changeMark } = classInfoSlice.actions;
 
 export default classInfoSlice.reducer;

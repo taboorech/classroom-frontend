@@ -13,4 +13,8 @@ export default configureStore({
     classInfo: classInfoReducer,
     QRForm: QRReducer
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })

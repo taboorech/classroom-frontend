@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getClassInfo, setOpen, changeTitleInput, changeDescriptionInput, deleteClass } from '../../redux/classInfo/classInfoSlice';
+import { getClassInfo, setOpen, changeTitleInput, changeDescriptionInput, deleteClass, getMarks } from '../../redux/classInfo/classInfoSlice';
 import M from 'materialize-css';
 import { openForm, closeForm } from '../../redux/createForm/createFormSlice';
 import { openQRForm, closeQRForm } from '../../redux/QR/QRSlice';
@@ -12,6 +12,7 @@ import { CSSTransition } from 'react-transition-group';
 import Background from '../../components/Background/Background';
 import UserList from '../../components/UserList/UserList';
 import QR from '../../components/QR/QR';
+import GradeBook from '../../components/GradeBook/GradeBook';
 
 export default function ClassInfo(props) {
 
@@ -106,7 +107,7 @@ export default function ClassInfo(props) {
               <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}><a href="#lessonsBlock">Test 1</a></li>
               <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}><a href="#usersBlock">Test 2</a></li>
               {classInfo.owner ?
-              <li className="tab col s4"><a href="#test3">Test 3</a></li> : null}
+              <li className="tab col s4"><a href="#gradeBook" onClick={!classInfo.marks ? () => dispatch(getMarks({ id: classInfo.info._id })) : null} >Test 3</a></li> : null}
             </ul>
           </div>
           <div id="lessonsBlock" className="col s12">
@@ -137,7 +138,14 @@ export default function ClassInfo(props) {
             ></UserList>
           </div>
           {classInfo.owner ?
-          <div id="test3" style={{display: 'none'}} className="col s12">Test 3</div> : null}
+          <div id="gradeBook" style={{display: 'none'}} className="col s12">
+            { classInfo.marks ?
+            <GradeBook 
+              lessons = { classInfo.info.lessons }
+              members = { classInfo.info.members }
+              marks = { classInfo.marks }
+            /> : null }
+          </div> : null}
         </div>
       </div>
     </>
