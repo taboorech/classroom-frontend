@@ -1,0 +1,90 @@
+.navigationBlock {
+  a {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    color: #5e5e5e;
+    margin-left: 1rem;
+    &:hover {
+      text-decoration: underline;
+    }
+    h5 {
+      margin-bottom: 0;
+    }
+    p {
+      margin-top: 0;
+    }
+  }
+}
+.generalBlock {
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+  margin-top: 2rem;
+  .mainInfo {
+    min-height: 5rem;
+    border: 1px solid darkgray;
+    border-right: none;
+    .mainTitleBlock {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      .mainTitle {
+        font-size: 18px;
+      }
+
+      .expires {
+        &.missed {
+          color: red;
+        }
+      }
+    }
+    .attachedElements {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      margin: 0rem 1rem;
+      align-items: center;
+      a.attachedElement {
+        display: flex;
+        width: auto;
+        color: #000;
+        border: 1px solid darkgray;
+        border-radius: 5px;
+        padding: 0.5rem 1rem;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        i {
+          margin-right: 0.5rem;
+          margin-left: 0;
+        }
+        &:hover {
+          border-color: #000;
+        }
+      }
+    }
+  }
+
+  .filesBlock {
+    border: 1px solid darkgray;
+    .userFilesBlock {
+      a.userFile {
+        display: flex;
+        flex-direction: row;
+        border-top: 1px solid darkgray;
+        padding: 0.5rem;
+        color: #000;
+        i {
+          margin-right: 0.5rem;
+        }
+        &:last-child {
+          border-bottom: 1px solid darkgray;
+        }
+      }
+    }
+    button {
+      margin: 1rem 0;
+    }
+  }
+}

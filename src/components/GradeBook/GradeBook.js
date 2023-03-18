@@ -30,10 +30,7 @@ export default function GradeBook(props) {
         return M.toast({html: `${error}`});
       })
     }
-    console.log(!event.target.getAttribute("firstaction"));
   }
-
-  console.log(classInfo);
 
   return (
     <table>
@@ -64,7 +61,7 @@ export default function GradeBook(props) {
                       type="text"
                       firstaction = { mark ? mark._id : '' }
                       onBlur = {(event) => saveAssessment(event)}
-                      className="validate" 
+                      className="validate marks-input" 
                     />
                   </div>
                 </div>
