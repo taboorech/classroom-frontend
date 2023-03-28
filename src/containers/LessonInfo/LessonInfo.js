@@ -1,12 +1,19 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-import { getLessonInfo } from '../../redux/lessonInfo/lessonInfoSlice';
+import CreateForm from "../../components/CreateForm/CreateForm";
+import { openForm, closeForm } from "../../redux/createForm/createFormSlice";
+import { getLessonInfo, uploadFiles, changeURLInput } from '../../redux/lessonInfo/lessonInfoSlice';
+import M from 'materialize-css';
 import './LessonInfo.scss';
+import { CSSTransition } from 'react-transition-group';
+import Background from '../../components/Background/Background';
+import mainInstance from '../../api/mainInstance';
 
 export default function LessonInfo() {
 
   const classes = useSelector((state) => state.classes);
+  const createForm = useSelector((state) => state.createForm);
   const lessonInfo = useSelector((state) => state.lessonInfo);
   const dispatch = useDispatch();
   const { id, lessonId } = useParams();
@@ -14,7 +21,14 @@ export default function LessonInfo() {
 
   useEffect(() => {
     dispatch(getLessonInfo({ id, lessonId }));
-  }, [dispatch, id, lessonId])
+  }, [dispatch, id, lessonId]);
+  
+  useEffect(() => {
+    const dropdowns = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(dropdowns);
+    const modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+  })
 
   let classTitle;
   let classDesription;
@@ -32,9 +46,54 @@ export default function LessonInfo() {
     }).format(new Date(date));
   }
 
+  const fileInputOnChange = (event) => {
+    const modal = document.querySelector('.modal#filesModal');
+    let instance = M.Modal.getInstance(modal);
+    instance.close();
+    let files = new FormData();
+    files.append('files', event.target.files[0]);
+    dispatch(uploadFiles({
+      id, 
+      lessonId, 
+      files
+    }));
+    event.target.value = null;
+  }
+
+  const urlInputConfirm = (event) => {
+    console.log(event);
+    let attachedElements = new FormData();
+    attachedElements.append('attachedElements', lessonInfo.urlInput);
+    dispatch(uploadFiles({
+      id,
+      lessonId,
+      attachedElements
+    }))
+    dispatch(changeURLInput(''));
+  }
+
   return (
-    lessonInfo.info.lesson ?
+    lessonInfo.lesson ?
     <>
+      <CSSTransition in={createForm.open} mountOnEnter unmountOnExit timeout={{
+        enter: 700,
+        exit: 700
+      }}>
+        <Background onClick={() => {
+          dispatch(closeForm());
+        }} /> 
+      </CSSTransition>
+      <div className='add-link-block row'>
+        <CreateForm btnTitle = {'Add'} onBtnClick={(event) => {
+          urlInputConfirm(event);
+          dispatch(openForm());
+        }}>
+          <div className="input-field col s12">
+            <input id="URL" type="text" value={ lessonInfo.urlInput } onChange={(event) => dispatch(changeURLInput(event.target.value))} className="validate" />
+            <label htmlFor="URL">URL</label>
+          </div>
+        </CreateForm>
+      </div>
       <div className='navigationBlock'>
         <Link to={`${location.origin}/classes/${id}`}>
           <h5>&lt; { classTitle }</h5>
@@ -45,14 +104,14 @@ export default function LessonInfo() {
         <div className="mainInfo col s12 m8 l9">
           <div className='mainTitleBlock row'>
             <div className='mainTitle col s3'>
-              { lessonInfo.info.lesson.title }
+              { lessonInfo.lesson.title }
             </div>
-            <div className={'expires col s3 offset-s6 right-align'.concat(+lessonInfo.info.lesson.expires < Date.now() ? ' missed' : '')}>
-              Deadline: { dateNormalize(+lessonInfo.info.lesson.expires) }
+            <div className={'expires col s3 offset-s6 right-align'.concat(+lessonInfo.lesson.expires < Date.now() ? ' missed' : '')}>
+              Deadline: { dateNormalize(+lessonInfo.lesson.expires) }
             </div>
           </div>
           <div className='attachedElements'>
-            { lessonInfo.info.lesson.attachedElements.map((attachedElement, index) => (
+            { lessonInfo.lesson.attachedElements.map((attachedElement, index) => (
               <Link 
                 to={ attachedElement.path } 
                 key={`attached-element-${index}`} 
@@ -70,31 +129,50 @@ export default function LessonInfo() {
         <div className="filesBlock col s12 m4 l3">
           <h5>Turn in: </h5>
           <div className='userFilesBlock'>
-            { lessonInfo.info.userElements ? lessonInfo.info.userElements.map((userElement) => (
-              <Link to={ userElement.files.path } target={'_blank'} className='userFile'>
+            { lessonInfo.userElements.files ? lessonInfo.userElements.files.map((userElement, index) => (
+              <Link key={`files-${index}`} to={ userElement.type === 'path' ? userElement.path : mainInstance.defaults.baseURL + '\\' + userElement.path } target={'_blank'} className='userFile'>
                 <i className="material-icons">
-                  { userElement.files.type === 'path' ? "insert_link" : "attach_file" }
+                  { userElement.type === 'path' ? "insert_link" : "attach_file" }
                 </i>
+                <div className='userFilesNames'>
+                  { userElement.originalname }
+                  { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+                  <i className="material-icons">
+                    clear
+                  </i> : null }
+                </div>
               </Link>
             )) : null}
-            <Link target={'_blank'} className='userFile'>
-              <i className="material-icons">
-                attach_file
-              </i>
-              FFF
-            </Link>
             { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-            <div className="file-field input-field">
-              <div className="btn">
-                <span>
-                  <i className='material-icons'>file_upload</i>
-                </span>
-                <input type="file" multiple />
+            <>
+              <button className="dropdown-trigger waves-effect waves-light btn col s8 offset-s2 addAttachments" data-target='attachmentsSwitch'>
+                <i className='material-icons'>add</i>
+                Add attachments
+              </button>
+              <ul id='attachmentsSwitch' className='dropdown-content'>
+                <li><a className="modal-trigger" href="#filesModal">Files</a></li>
+                <li><a href="#!" onClick={() => dispatch(openForm())}>Link</a></li>
+              </ul>
+              <div id="filesModal" className="modal">
+                <div className="modal-content">
+                  <h4>Add Files</h4>
+                  <div className="file-field input-field">
+                    <div className="btn">
+                      <span>
+                        <i className='material-icons'>file_upload</i>
+                      </span>
+                      <input type="file" onChange={(event) => fileInputOnChange(event)} multiple />
+                    </div>
+                    <div className="file-path-wrapper">
+                      <input className="file-path validate" type="text" placeholder="Upload one or more files"/>
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <a href="#!" className="modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
               </div>
-              <div className="file-path-wrapper">
-                <input className="file-path validate" type="text" placeholder="Upload one or more files"/>
-              </div>
-            </div> : null }
+            </> : null }
           </div>
           <button className="waves-effect waves-light btn col s12 l8 offset-l2" disabled={lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ? false : true}>
             <i className="material-icons left">check</i>

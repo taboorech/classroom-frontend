@@ -78,9 +78,21 @@
         i {
           margin-right: 0.5rem;
         }
+        .userFilesNames {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          // background: #000;
+          width: 100%;
+        }
         &:last-child {
           border-bottom: 1px solid darkgray;
         }
+      }
+      button.addAttachments {
+        display: flex;
+        flex-direction: row;
       }
     }
     button {

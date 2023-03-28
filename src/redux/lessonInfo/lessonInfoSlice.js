@@ -10,19 +10,38 @@ export const getLessonInfo = createAsyncThunk(
   }
 )
 
+export const uploadFiles = createAsyncThunk(
+  'lessonInfo/uploadFiles',
+  async (data, { rejectWithValue }) => {
+    console.log(data);
+    return await mainInstance.post(`/classes/${data.id}/${data.lessonId}/turnIn?operation=UPLOAD`, {
+      files: data.files ? data.files.get('files') : null,
+      attachedElements: data.attachedElements ? data.attachedElements.get('attachedElements') : null
+    }, {
+      headers: { "content-type": "multipart/form-data" }
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const lessonInfo = createSlice({
   name: 'lessonInfo',
   initialState: {
-    info: {},
+    urlInput: '',
     error: []
   },
   reducers: {
-    
+    changeURLInput: (state, action) => {
+      state.urlInput = action.payload;
+    }
   },
   extraReducers: builder => {
     builder
     .addCase(getLessonInfo.fulfilled, (state, action) => {
-      state.info = {...action.payload};
+      state.lesson = {...action.payload.lesson};
+      state.marks = {...action.payload.marks};
+      state.userElements = {...action.payload.userElements};
       state.error = [];
     })
     .addCase(getLessonInfo.rejected, (state, action) => {
@@ -33,9 +52,20 @@ export const lessonInfo = createSlice({
         state.error.push(action.payload);
       }
     })
+    .addCase(uploadFiles.fulfilled, (state, action) => {
+      state.userElements = {...action.payload};
+    })
+    .addCase(uploadFiles.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
   }
 })
 
-// export const { } = classesSlice.actions;
+export const { changeURLInput } = lessonInfo.actions;
 
 export default lessonInfo.reducer;

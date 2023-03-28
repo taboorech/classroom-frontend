@@ -1,18 +1,16 @@
 table {
   overflow-x: scroll !important;
   tr {
-
     th:not(:first-child) {
       text-align: center;
     }
 
-    td:first-child(1) {
+    td:first-child {
       position: sticky;
     }
 
     td:not(:first-child) {
-      display: flex;
-      justify-content: center;
+      text-align: center;
       .marks-input {
         width: auto !important;
         text-align: center;
