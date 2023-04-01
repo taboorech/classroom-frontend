@@ -1,0 +1,22 @@
+.LessonCheck {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-bottom: 1px solid darkgray;
+  // .marksInfo {
+  //   // display: flex;
+  //   // align-items: center;
+  //   // justify-content: flex-start;
+  // }
+  .input-field {
+    input {
+      text-align: center;
+    }
+  }
+  div.col:not(.input-field) {
+    border: none;
+    &:not(:last-child) {
+      border-right: 1px solid darkgray;
+    }
+  }
+}

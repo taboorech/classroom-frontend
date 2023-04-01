@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import CreateForm from "../../components/CreateForm/CreateForm";
 import { openForm, closeForm } from "../../redux/createForm/createFormSlice";
-import { getLessonInfo, uploadFiles, changeURLInput } from '../../redux/lessonInfo/lessonInfoSlice';
+import { getLessonInfo, uploadFiles, changeURLInput, deleteElements, turnIn, cancel } from '../../redux/lessonInfo/lessonInfoSlice';
 import M from 'materialize-css';
 import './LessonInfo.scss';
 import { CSSTransition } from 'react-transition-group';
@@ -72,6 +72,34 @@ export default function LessonInfo() {
     dispatch(changeURLInput(''));
   }
 
+  const deleteElementClick = (event) => {
+    event.preventDefault();
+    let message = window.confirm(`Do you want to delete file?`);
+    if(message) {
+      let attachedElements = new FormData();
+      attachedElements.append('attachedElements', event.target.getAttribute("element_id"));
+      dispatch(deleteElements({
+        id,
+        lessonId,
+        attachedElements
+      }))
+    }
+  }
+
+  const turnInFunc = () => {
+    dispatch(turnIn({
+      id,
+      lessonId
+    }))
+  }
+
+  const cancelTurnInFunc = () => {
+    dispatch(cancel({
+      id,
+      lessonId
+    }))
+  }
+
   return (
     lessonInfo.lesson ?
     <>
@@ -103,10 +131,11 @@ export default function LessonInfo() {
       <div className="generalBlock row">
         <div className="mainInfo col s12 m8 l9">
           <div className='mainTitleBlock row'>
-            <div className='mainTitle col s3'>
+            <div className='mainTitle col s9 l3'>
               { lessonInfo.lesson.title }
+              { !!lessonInfo.marks.mark ? <p>{lessonInfo.marks.mark} of {lessonInfo.lesson.maxMark}</p> : null }
             </div>
-            <div className={'expires col s3 offset-s6 right-align'.concat(+lessonInfo.lesson.expires < Date.now() ? ' missed' : '')}>
+            <div className={'expires col s3 l3 offset-l6 right-align'.concat(+lessonInfo.lesson.expires < Date.now() && !lessonInfo.userElements.turnIn && lessonInfo.marks === null ? ' missed' : '')}>
               Deadline: { dateNormalize(+lessonInfo.lesson.expires) }
             </div>
           </div>
@@ -137,7 +166,7 @@ export default function LessonInfo() {
                 <div className='userFilesNames'>
                   { userElement.originalname }
                   { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-                  <i className="material-icons">
+                  <i className="material-icons" element_id = { userElement._id } onClick={(event) => deleteElementClick(event)}>
                     clear
                   </i> : null }
                 </div>
@@ -146,7 +175,7 @@ export default function LessonInfo() {
             { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
             <>
               <button className="dropdown-trigger waves-effect waves-light btn col s8 offset-s2 addAttachments" data-target='attachmentsSwitch'>
-                <i className='material-icons'>add</i>
+                <i className='material-icons left'>add</i>
                 Add attachments
               </button>
               <ul id='attachmentsSwitch' className='dropdown-content'>
@@ -174,10 +203,26 @@ export default function LessonInfo() {
               </div>
             </> : null }
           </div>
-          <button className="waves-effect waves-light btn col s12 l8 offset-l2" disabled={lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ? false : true}>
-            <i className="material-icons left">check</i>
-            Turn in
-          </button>
+          { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+          <>
+            <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger" >
+              <i className="material-icons left">check</i>
+              Turn in
+            </button>
+            <div id="turnInModal" className="modal">
+              <div className="modal-content">
+                <h4>Turn in?</h4>
+              </div>
+              <div className="modal-footer">
+                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Cancel</a>
+                <a href="#!" className="modal-close waves-effect waves-green btn-flat" onClick={() => turnInFunc()}>Turn in</a>
+              </div>
+            </div>
+          </> : 
+          <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger red" onClick={() => cancelTurnInFunc()}>
+            <i className="material-icons left">clear</i>
+            Cancel
+          </button>}
         </div>
       </div>
       <div className="secondaryBlock">

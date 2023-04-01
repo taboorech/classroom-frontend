@@ -85,6 +85,17 @@ export const updateAssessment = createAsyncThunk(
   }
 )
 
+export const returnWork = createAsyncThunk(
+  'classInfo/returnWork',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.patch(`/classes/${data.id}/${data.lessonId}/return`, {
+      memberId: data.memberId
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const classInfoSlice = createSlice({
   name: 'classInfo',
   initialState: {
@@ -216,7 +227,9 @@ export const classInfoSlice = createSlice({
       }
     })
     .addCase(makeAssessment.fulfilled, (state, action) => {
-      state.marks.push(action.payload);
+      if(state.marks) {
+        state.marks.push(action.payload);
+      }
     })
     .addCase(makeAssessment.rejected, (state, action) => {
       if(Array.isArray(action.payload) && action.payload.length > 1) {
@@ -227,6 +240,14 @@ export const classInfoSlice = createSlice({
       }
     })
     .addCase(updateAssessment.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
+    .addCase(returnWork.rejected, (state, action) => {
       if(Array.isArray(action.payload) && action.payload.length > 1) {
         state.error = [...action.payload];
       } else {

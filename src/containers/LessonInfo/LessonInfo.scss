@@ -35,6 +35,9 @@
       }
 
       .expires {
+        display: flex;
+        align-self: start;
+        justify-content: flex-end;
         &.missed {
           color: red;
         }
@@ -64,6 +67,10 @@
         }
       }
     }
+    @media (max-width: 600px) {
+      border-bottom: 0;
+      border-right: 1px solid darkgray;
+    }
   }
 
   .filesBlock {
@@ -90,10 +97,10 @@
           border-bottom: 1px solid darkgray;
         }
       }
-      button.addAttachments {
-        display: flex;
-        flex-direction: row;
-      }
+      // button.addAttachments {
+      //   display: flex;
+      //   flex-direction: row;
+      // }
     }
     button {
       margin: 1rem 0;

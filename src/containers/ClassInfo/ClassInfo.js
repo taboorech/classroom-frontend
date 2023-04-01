@@ -104,10 +104,22 @@ export default function ClassInfo(props) {
         <div className="col s12 m8 offset-m2">
           <div className="col s12">
             <ul className="tabs">
-              <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}><a href="#lessonsBlock">Test 1</a></li>
-              <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}><a href="#usersBlock">Test 2</a></li>
+              <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}>
+                <a href="#lessonsBlock">
+                  <i className='material-icons'>assignment</i>
+                </a>
+              </li>
+              <li className={"tab col ".concat(classInfo.owner ? "s4" : "s6")}>
+                <a href="#usersBlock">
+                  <i className='material-icons'>person</i>
+                </a>
+              </li>
               {classInfo.owner ?
-              <li className="tab col s4"><a href="#gradeBook" onClick={!classInfo.marks ? () => dispatch(getMarks({ id: classInfo.info._id })) : null} >Test 3</a></li> : null}
+              <li className="tab col s4">
+                <a href="#gradeBook" onClick={!classInfo.marks ? () => dispatch(getMarks({ id: classInfo.info._id })) : null} >
+                  <i className='material-icons'>assessment</i>
+                </a>
+              </li> : null}
             </ul>
           </div>
           <div id="lessonsBlock" className="col s12">
@@ -121,7 +133,8 @@ export default function ClassInfo(props) {
                   key={`lesson-${index}`} 
                   lessonId = { lesson._id }
                   title={ lesson.title } 
-                  description={ lesson.description } 
+                  description={ lesson.description }
+                  isOwner = { classInfo.owner } 
                   attachedElements = { lesson.attachedElements }
                   className = { classInfo.isOpen === index ? 'active' : "" }
                   onClick = {() => { dispatch(setOpen(index)) }}

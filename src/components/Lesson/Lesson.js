@@ -21,7 +21,9 @@ export default function Lesson(props) {
             )) }
           </div>
           <div className='button-block row'>
-            <Link to={`${location.pathname}/${ props.lessonId }`} className="waves-effect waves-light btn col s12 m6 offset-m3 l2">Open lesson</Link>
+            <Link to={`${location.pathname}/${ props.lessonId }`.concat(props.isOwner ? `/check` : "")} className="waves-effect waves-light btn col s12 m6 offset-m3 l2">
+              {props.isOwner ? "Check works" : "Open lesson"}
+            </Link>
           </div>
         </div>
       </div>

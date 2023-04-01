@@ -103,10 +103,6 @@ export default function Classes(props) {
             >Connect</button>
           </div>
         </div>
-        {/* <button 
-          className="col s10 offset-s1 m4 offset-m7 l1 offset-l10 waves-effect waves-light btn create-class-button" 
-          onClick={() => {dispatch(openForm())}}
-        >Create</button> */}
       </div>
       <div className="Classes row">
         { classes.classes.map((classObj, index) => (
