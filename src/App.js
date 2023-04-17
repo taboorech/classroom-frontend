@@ -7,6 +7,7 @@ import ClassInfo from "./containers/ClassInfo/ClassInfo";
 import Layout from "./hoc/Layout/Layout";
 import LessonInfo from "./containers/LessonInfo/LessonInfo";
 import LessonCheck from './containers/LessonCheck/LessonCheck';
+import EditLesson from "./containers/EditLesson/EditLesson";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/classes/:id" element={<ClassInfo />}></Route>
         <Route path="/classes/:id/:lessonId" element={<LessonInfo />}></Route>
         <Route path="/classes/:id/:lessonId/check" element={<LessonCheck />}></Route>
+        <Route path="/classes/:id/edit" element={<EditLesson />}></Route>
         <Route path="/auth" element={<Auth/>}></Route>
       </Routes>
     </Layout>

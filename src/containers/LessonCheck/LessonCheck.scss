@@ -3,20 +3,23 @@
   flex-direction: row;
   align-items: stretch;
   border-bottom: 1px solid darkgray;
-  // .marksInfo {
-  //   // display: flex;
-  //   // align-items: center;
-  //   // justify-content: flex-start;
-  // }
+  border-top: 1px solid darkgray;
   .input-field {
     input {
       text-align: center;
     }
   }
-  div.col:not(.input-field) {
+  div.collection {
     border: none;
     &:not(:last-child) {
       border-right: 1px solid darkgray;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    flex-direction: column;
+    .users > div, .works > div {
+      height: 10rem;
+      overflow-y: scroll;
     }
   }
 }

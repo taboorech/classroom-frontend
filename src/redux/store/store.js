@@ -6,6 +6,7 @@ import classInfoReducer from '../classInfo/classInfoSlice';
 import QRReducer from '../QR/QRSlice';
 import lessonInfoReducer from '../lessonInfo/lessonInfoSlice';
 import lessonCheckReducer from '../lessonCheck/lessonCheckSlice';
+import editLessonReducer from '../editLesson/editLessonSlice';
 
 export default configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export default configureStore({
     classInfo: classInfoReducer,
     lessonInfo: lessonInfoReducer,
     lessonCheck: lessonCheckReducer,
+    editLesson: editLessonReducer,
     QRForm: QRReducer
   },
   middleware: (getDefaultMiddleware) =>

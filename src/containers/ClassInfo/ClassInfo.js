@@ -19,6 +19,7 @@ export default function ClassInfo(props) {
   const classInfo = useSelector((state) => state.classInfo);
   const createForm = useSelector((state) => state.createForm);
   const QRFormState = useSelector((state) => state.QRForm);
+  const location = window.location;
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -125,7 +126,7 @@ export default function ClassInfo(props) {
           <div id="lessonsBlock" className="col s12">
             { classInfo.owner ?
             <div className='row create-lesson-block' >
-              <Link className="col s10 offset-s1 m8 offset-m2 l6 offset-l3 waves-effect waves-light btn create-button">Create new exercise</Link>
+              <Link to={`${location.href}/edit`} className="col s10 offset-s1 m8 offset-m2 l6 offset-l3 waves-effect waves-light btn create-button">Create new exercise</Link>
             </div> : null }
             <div className="collection z-depth-1">
               { classInfo.info.lessons ? classInfo.info.lessons.map((lesson, index) => (

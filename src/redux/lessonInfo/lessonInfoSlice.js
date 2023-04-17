@@ -13,10 +13,7 @@ export const getLessonInfo = createAsyncThunk(
 export const uploadFiles = createAsyncThunk(
   'lessonInfo/uploadFiles',
   async (data, { rejectWithValue }) => {
-    return await mainInstance.post(`/classes/${data.id}/${data.lessonId}/turnIn?operation=UPLOAD`, {
-      files: data.files ? data.files.get('files') : null,
-      attachedElements: data.attachedElements ? data.attachedElements.get('attachedElements') : null
-    }, {
+    return await mainInstance.post(`/classes/${data.id}/${data.lessonId}/turnIn?operation=UPLOAD`, data.files ? data.files : data.attachedElements, {
       headers: { "content-type": "multipart/form-data" }
     })
     .then((response) => response.data)

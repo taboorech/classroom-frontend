@@ -13,11 +13,46 @@ export const getLessonWorks = createAsyncThunk(
 export const lessonCheck = createSlice({
   name: 'lessonCheck',
   initialState: {
+    buttonState: 'return',
+    members: [],
+    lesson: {},
+    marks: [],
+    works: [],
+    turnIn: false,
     error: []
   },
   reducers: {
     changeMark: (state, action) => {
       state[action.payload.id] = action.payload.value;
+    },
+    changeButtonState: (state, action) => {
+      state.buttonState = action.payload;
+    },
+    changeTurnIn: (state, action) => {
+      state.turnIn = action.payload.value;
+      const works = state.works;
+      works.map((work) => (
+        work.user._id === action.payload.userId ? work.turnIn = action.payload.value : null
+      ))
+      state.works = works;
+    },
+    changeStateMark: (state, action) => {
+      const marks = state.marks;
+      marks.push({
+        mark: action.payload.mark,
+        user: action.payload.userId
+      })
+      state.marks = marks;
+    },
+    returnWorkState: (state, action) => {
+      const works = state.works;
+      works.map((work) => (
+        work.user._id === action.payload.userId ? work.turnIn = false : null
+      ))
+      let marks = state.marks;
+      marks = marks.filter((mark) => mark.user !== action.payload.userId);
+      state.works = works;
+      state.marks = marks;
     }
   },
   extraReducers: builder => {
@@ -47,6 +82,6 @@ export const lessonCheck = createSlice({
   }
 })
 
-export const { changeMark } = lessonCheck.actions;
+export const { changeMark, changeTurnIn, changeButtonState, changeStateMark, returnWorkState } = lessonCheck.actions;
 
 export default lessonCheck.reducer;

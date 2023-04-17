@@ -9,6 +9,7 @@ import './LessonInfo.scss';
 import { CSSTransition } from 'react-transition-group';
 import Background from '../../components/Background/Background';
 import mainInstance from '../../api/mainInstance';
+import ReturnAnchor from '../../components/ReturnAnchor/ReturnAnchor';
 
 export default function LessonInfo() {
 
@@ -51,7 +52,9 @@ export default function LessonInfo() {
     let instance = M.Modal.getInstance(modal);
     instance.close();
     let files = new FormData();
-    files.append('files', event.target.files[0]);
+    for(let i = 0; i < event.target.files.length; i++) {
+      files.append('files', event.target.files[i]);
+    }
     dispatch(uploadFiles({
       id, 
       lessonId, 
@@ -122,12 +125,7 @@ export default function LessonInfo() {
           </div>
         </CreateForm>
       </div>
-      <div className='navigationBlock'>
-        <Link to={`${location.origin}/classes/${id}`}>
-          <h5>&lt; { classTitle }</h5>
-          <p>{ classDesription }</p>
-        </Link>
-      </div>
+      <ReturnAnchor link={`${location.origin}/classes/${id}`} title={classTitle} secondaryContent={classDesription} />
       <div className="generalBlock row">
         <div className="mainInfo col s12 m8 l9">
           <div className='mainTitleBlock row'>
@@ -163,13 +161,13 @@ export default function LessonInfo() {
                 <i className="material-icons">
                   { userElement.type === 'path' ? "insert_link" : "attach_file" }
                 </i>
-                <div className='userFilesNames'>
+                <div className='userFilesNames' title={ userElement.originalname }>
                   { userElement.originalname }
-                  { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-                  <i className="material-icons" element_id = { userElement._id } onClick={(event) => deleteElementClick(event)}>
-                    clear
-                  </i> : null }
                 </div>
+                { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+                <i className="material-icons" element_id = { userElement._id } onClick={(event) => deleteElementClick(event)}>
+                  clear
+                </i> : null }
               </Link>
             )) : null}
             { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
