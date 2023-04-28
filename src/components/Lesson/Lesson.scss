@@ -5,6 +5,7 @@
   .title-block {
     display: flex;
     position: relative;
+    justify-content: space-between;
     z-index: 2;
     align-items: center;
     margin: 1rem 0.5rem;
@@ -12,6 +13,20 @@
     border: none;
     cursor: pointer;
     transition: all .7s;
+    a {
+      color: #000;
+    }
+    .secondary-content {
+      display: flex;
+      flex-direction: row;
+      color: #000;
+      .expires.missed {
+        color: red;
+      }
+      .buttonsBlock {
+        margin-left: 3rem;
+      }
+    }
   }
 
   .lesson-body {

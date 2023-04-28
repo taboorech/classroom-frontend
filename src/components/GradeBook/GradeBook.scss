@@ -1,20 +1,33 @@
-table {
-  overflow-x: scroll !important;
-  tr {
-    th:not(:first-child) {
-      text-align: center;
-    }
+.GradeBook {
+  table {
+    margin-top: 1rem;
+    tr {
+      position: relative;
+      th, td {
+        white-space: nowrap;
+        min-width: 10rem;
+      }
 
-    td:first-child {
-      position: sticky;
-    }
-
-    td:not(:first-child) {
-      text-align: center;
-      .marks-input {
-        width: auto !important;
+      th:not(:first-child) {
         text-align: center;
       }
+
+      td:first-child {
+        position: sticky;
+      }
+
+      td:not(:first-child) {
+        text-align: center;
+        padding: 0;
+        .marks-input {
+          width: 3rem !important;
+          text-align: center;
+        }
+      }
     }
+  }
+
+  table, th, td {
+    border: 1px solid darkgray;
   }
 }

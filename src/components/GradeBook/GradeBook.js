@@ -33,43 +33,45 @@ export default function GradeBook(props) {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Students</th>
-          { props.lessons ? props.lessons.map((lesson, index) => (
-            <th key={`lessons-names-${index}`} >{ lesson.title }</th>
-          )) : null }
-        </tr>
-      </thead>
+    <div className="GradeBook">
+      <table>
+        <thead>
+          <tr>
+            <th>Students</th>
+            { props.lessons ? props.lessons.map((lesson, index) => (
+              <th key={`lessons-names-${index}`} >{ lesson.title }</th>
+            )) : null }
+          </tr>
+        </thead>
 
-      <tbody>
-        { props.members ? props.members.map((member, index) => (
-          <tr key={`member-${index}`}>
-            <td>{`${member.surname} ${member.name}`}</td>
-            { props.lessons ? props.lessons.map((lesson, index) => {
-              const mark = props.marks.find((mark) => (mark.lesson === lesson._id || mark.lesson._id === lesson._id) && (mark.user === member._id || mark.user._id === member._id));
-              return <td key={`mark-column-${index}`} >
-                <div className="row">
-                  <div className="input-field col s12">
-                    <input 
-                      id={`mark${lesson._id + member._id}Value`} 
-                      value={ classInfo[`mark${lesson._id + member._id}Value`] } 
-                      onChange={(event) => dispatch(changeMark(event.target))} 
-                      lessonid = { lesson._id }
-                      memberid = { member._id }
-                      type="text"
-                      firstaction = { mark ? mark._id : '' }
-                      onBlur = {(event) => saveAssessment(event)}
-                      className="validate marks-input" 
-                    />
+        <tbody>
+          { props.members ? props.members.map((member, index) => (
+            <tr key={`member-${index}`}>
+              <td>{`${member.surname} ${member.name}`}</td>
+              { props.lessons ? props.lessons.map((lesson, index) => {
+                const mark = props.marks.find((mark) => (mark.lesson === lesson._id || mark.lesson._id === lesson._id) && (mark.user === member._id || mark.user._id === member._id));
+                return <td key={`mark-column-${index}`} >
+                  <div className="row">
+                    <div className="input-field col s12">
+                      <input 
+                        id={`mark${lesson._id + member._id}Value`} 
+                        value={ classInfo[`mark${lesson._id + member._id}Value`] } 
+                        onChange={(event) => dispatch(changeMark(event.target))} 
+                        lessonid = { lesson._id }
+                        memberid = { member._id }
+                        type="text"
+                        firstaction = { mark ? mark._id : '' }
+                        onBlur = {(event) => saveAssessment(event)}
+                        className="validate marks-input" 
+                      />
+                    </div>
                   </div>
-                </div>
-              </td>
-            }) : null }
-          </tr>  
-        )) : null }
-      </tbody>
-    </table>
+                </td>
+              }) : null }
+            </tr>  
+          )) : null }
+        </tbody>
+      </table>
+    </div>
   )
 }

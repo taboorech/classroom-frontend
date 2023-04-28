@@ -4,7 +4,8 @@ import './EditLesson.scss';
 import ReturnAnchor from "../../components/ReturnAnchor/ReturnAnchor";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { changeTitle, changeMark, changeDescription, changeType, changeExpires, changeFiles, changeAttachments, createLesson } from "../../redux/editLesson/editLessonSlice";
+import { changeTitle, changeMark, changeDescription, changeType, changeExpires, changeFiles, changeAttachments, createLesson, getLesson, updateLesson, clearValues } from "../../redux/editLesson/editLessonSlice";
+import { dateNormalize } from "../../api/dateNormalize";
 
 export default function EditLesson() {
 
@@ -12,6 +13,7 @@ export default function EditLesson() {
   const editLessonState = useSelector((state) => state.editLesson);
   const classes = useSelector((state) => state.classes);
   const location = window.location;
+  const lessonId = location.search.split('?lesson=')[1];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -20,7 +22,8 @@ export default function EditLesson() {
   }
 
   const datePickerChange = (value) => {
-    dispatch(changeExpires(value));
+    const expires = value.split('.');
+    dispatch(changeExpires(new Date(expires[2], expires[1] - 1, expires[0]).getTime()));
   }
 
   const addUrlClick = () => {
@@ -48,12 +51,21 @@ export default function EditLesson() {
       lesson.append('attachedElements[]', editLessonState.attachedElements[key])
     ))
     lesson.append('expires', editLessonState.expires);
-    dispatch(createLesson({
-      id,
-      lesson
-    }));
+    if(!lessonId) {
+      dispatch(createLesson({
+        id,
+        lesson
+      }));
+    } else {
+      dispatch(updateLesson({
+        id,
+        lessonId,
+        lesson
+      }))
+    }
+    console.log(editLessonState.expires);
     if(!editLessonState.error.length) {
-      navigate(-1)
+      navigate(-1);
     }
   }
   
@@ -62,13 +74,29 @@ export default function EditLesson() {
     let datepickers = document.querySelectorAll('.datepicker');
     M.FormSelect.init(select);
     M.Datepicker.init(datepickers, { autoClose: true, format: 'dd.mm.yyyy', onClose: () => datePickerChange(datepickers[0].value) });
+    if(!!editLessonState.expires) {
+      datepickers[0].value = dateNormalize(+editLessonState.expires);
+    } else {
+      datepickers[0].value = '';
+    }
     M.updateTextFields();
   })
+
+  useEffect(() => {
+    if(!!lessonId) {
+      dispatch(getLesson({
+        id,
+        lessonId
+      }))
+    } else {
+      dispatch(clearValues());
+    }
+  }, [dispatch, id, lessonId])
 
   return (
     <div className="EditLesson row">
       <ReturnAnchor link={`${location.origin}/classes/${id}`} title={classTitle} secondaryContent={classDesription} />
-      <div className="col s6 offset-s3">
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
         <div className="input-field col s9">
           <input 
             id="title" 
@@ -90,7 +118,7 @@ export default function EditLesson() {
           <label htmlFor="maxMark">Max mark</label>
         </div>
       </div>
-      <div className="col s6 offset-s3">
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
         <div className="input-field col s12">
           <textarea 
             id="description" 
@@ -101,7 +129,7 @@ export default function EditLesson() {
           <label htmlFor="description">Description</label>
         </div>
       </div>
-      <div className="col s6 offset-s3">
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
         <div className="input-field col s12">
           <select 
             value={editLessonState.type || "DEFAULT"} 
@@ -114,8 +142,8 @@ export default function EditLesson() {
           <label>Type</label>
         </div>
       </div>
-      <h5 className="col s6 offset-s3">Attachments: </h5>
-      <div className="col s6 offset-s3">
+      <h5 className="col l6 m8 offset-m2 s12 offset-l3">Attachments: </h5>
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
         {Object.keys(editLessonState.attachedElements).map((key, index) => (
           <div className="input-field col s12" key={`add-attachments-link-${index}`}>
             <input 
@@ -136,7 +164,7 @@ export default function EditLesson() {
           onClick={() => addUrlClick()}
         >Add url</button>
       </div>
-      <div className="col s6 offset-s3">
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
         <div className="file-field input-field col s12">
           <div className="btn">
             <span>Files</span>
@@ -147,7 +175,7 @@ export default function EditLesson() {
           </div>
         </div>
       </div>
-      <div className="col s6 offset-s3">
+      <div className="col l6 m8 offset-m2 s12 offset-l3" hidden={editLessonState.type === "LECTION"}>
         <div className="input-field col s12">
           <input 
             type="text" 
@@ -158,8 +186,10 @@ export default function EditLesson() {
           <label htmlFor="deadlineInput">Select deadline</label>
         </div>
       </div>
-      <div className="col s6 offset-s3">
-        <button className="btn waves-effect waves-light col s3" onClick={createButtonClick}>Create lesson</button>
+      <div className="col l6 m8 offset-m2 s12 offset-l3">
+        <button className="btn waves-effect waves-light col s3" onClick={createButtonClick}>
+          {lessonId ? `Update lesson` : `Create lesson`}
+        </button>
       </div>
     </div>
   )

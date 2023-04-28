@@ -24,6 +24,11 @@ export default function ClassInfo(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const openInfo = (event, index) => {
+    if(event.target.tagName !== "I")
+      dispatch(setOpen(index));
+  }
+
   useEffect(() => {
     dispatch(getClassInfo({ id }));
   }, [dispatch, id])
@@ -135,10 +140,11 @@ export default function ClassInfo(props) {
                   lessonId = { lesson._id }
                   title={ lesson.title } 
                   description={ lesson.description }
+                  expires = { lesson.expires }
                   isOwner = { classInfo.owner } 
                   attachedElements = { lesson.attachedElements }
                   className = { classInfo.isOpen === index ? 'active' : "" }
-                  onClick = {() => { dispatch(setOpen(index)) }}
+                  onClick = {(event) => openInfo(event, index) }
                 />
               )) : null }
             </div>

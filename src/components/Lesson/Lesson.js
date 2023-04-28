@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import './Lesson.scss';
+import { dateNormalize } from '../../api/dateNormalize';
 
 export default function Lesson(props) {
   
@@ -9,6 +10,18 @@ export default function Lesson(props) {
     <div className={'Lesson col s12 '.concat(props.className)}>
       <div className={'title-block'} onClick = { props.onClick }>
         { props.title }
+        <div className='secondary-content'>
+          <div className={'expires'.concat(!props.isOwner && props.expires < Date.now() ? ' missed' : null)}>
+            Deadline: { dateNormalize(+props.expires) }
+          </div>
+          { props.isOwner ?
+            <div className='buttonsBlock'>
+              <Link to={`./edit?lesson=${props.lessonId}`}>
+                <i className='material-icons'>edit</i>
+              </Link>
+            </div>
+          : null}
+        </div>
       </div>
       <div className='lesson-body'>
         <div className='lesson-body-content'>

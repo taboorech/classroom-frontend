@@ -12,6 +12,26 @@ export const createLesson = createAsyncThunk(
   }
 )
 
+export const updateLesson = createAsyncThunk(
+  'editLesson/updateLesson',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.patch(`/classes/${data.id}/${data.lessonId}`, data.lesson, {
+      headers: { "content-type": "multipart/form-data" }
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
+export const getLesson = createAsyncThunk(
+  'editLesson/getLesson',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.get(`/classes/${data.id}/${data.lessonId}/getLessonSettings`)
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const editLessonSlice = createSlice({
   name: 'editLesson',
   initialState: {
@@ -45,6 +65,16 @@ export const editLessonSlice = createSlice({
     },
     changeExpires: (state, action) => {
       state.expires = action.payload;
+    },
+    clearValues: (state, action) => {
+      state.title = '';
+      state.description = '';
+      state.type = '';
+      state.maxMark = '';
+      state.files = [];
+      state.attachedElements = {};
+      state.expires = '';
+      state.error = [];
     }
   },
   extraReducers: builder => {
@@ -57,9 +87,39 @@ export const editLessonSlice = createSlice({
         state.error.push(action.payload);
       }
     })
+    .addCase(getLesson.fulfilled, (state, action) => {
+      state.title = action.payload.title;
+      state.description = action.payload.description;
+      state.type = action.payload.type;
+      state.maxMark = action.payload.maxMark;
+      action.payload.attachedElements.map((attachment) => {
+        if(attachment.type === "file") {
+          return state.files.push(attachment);
+        } else {
+          return state.attachedElements[attachment._id] = attachment.path;
+        }
+      })
+      state.expires = action.payload.expires;
+    })
+    .addCase(getLesson.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
+    .addCase(updateLesson.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
   }
 })
 
-export const { changeTitle, changeMark, changeDescription, changeType, changeFiles, changeAttachments, changeExpires } = editLessonSlice.actions;
+export const { changeTitle, changeMark, changeDescription, changeType, changeFiles, changeAttachments, changeExpires, clearValues } = editLessonSlice.actions;
 
 export default editLessonSlice.reducer;

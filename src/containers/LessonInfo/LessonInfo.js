@@ -10,6 +10,7 @@ import { CSSTransition } from 'react-transition-group';
 import Background from '../../components/Background/Background';
 import mainInstance from '../../api/mainInstance';
 import ReturnAnchor from '../../components/ReturnAnchor/ReturnAnchor';
+import { dateNormalize } from '../../api/dateNormalize';
 
 export default function LessonInfo() {
 
@@ -37,14 +38,6 @@ export default function LessonInfo() {
     const classObj = classes.classes.find(({_id}) => _id.toString() === id);
     classTitle = classObj.title;
     classDesription = classObj.description;
-  }
-
-  const dateNormalize = (date) => {
-    return Intl.DateTimeFormat('ua', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric'
-    }).format(new Date(date));
   }
 
   const fileInputOnChange = (event) => {
@@ -153,75 +146,77 @@ export default function LessonInfo() {
             )) }
           </div>
         </div>
-        <div className="filesBlock col s12 m4 l3">
-          <h5>Turn in: </h5>
-          <div className='userFilesBlock'>
-            { lessonInfo.userElements.files ? lessonInfo.userElements.files.map((userElement, index) => (
-              <Link key={`files-${index}`} to={ userElement.type === 'path' ? userElement.path : mainInstance.defaults.baseURL + '\\' + userElement.path } target={'_blank'} className='userFile'>
-                <i className="material-icons">
-                  { userElement.type === 'path' ? "insert_link" : "attach_file" }
-                </i>
-                <div className='userFilesNames' title={ userElement.originalname }>
-                  { userElement.originalname }
-                </div>
-                { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-                <i className="material-icons" element_id = { userElement._id } onClick={(event) => deleteElementClick(event)}>
-                  clear
-                </i> : null }
-              </Link>
-            )) : null}
-            { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-            <>
-              <button className="dropdown-trigger waves-effect waves-light btn col s8 offset-s2 addAttachments" data-target='attachmentsSwitch'>
-                <i className='material-icons left'>add</i>
-                Add attachments
-              </button>
-              <ul id='attachmentsSwitch' className='dropdown-content'>
-                <li><a className="modal-trigger" href="#filesModal">Files</a></li>
-                <li><a href="#!" onClick={() => dispatch(openForm())}>Link</a></li>
-              </ul>
-              <div id="filesModal" className="modal">
-                <div className="modal-content">
-                  <h4>Add Files</h4>
-                  <div className="file-field input-field">
-                    <div className="btn">
-                      <span>
-                        <i className='material-icons'>file_upload</i>
-                      </span>
-                      <input type="file" onChange={(event) => fileInputOnChange(event)} multiple />
-                    </div>
-                    <div className="file-path-wrapper">
-                      <input className="file-path validate" type="text" placeholder="Upload one or more files"/>
+        { lessonInfo.lesson.type === "EXERCISE" ?
+          <div className="filesBlock col s12 m4 l3">
+            <h5>Turn in: </h5>
+            <div className='userFilesBlock'>
+              { lessonInfo.userElements.files ? lessonInfo.userElements.files.map((userElement, index) => (
+                <Link key={`files-${index}`} to={ userElement.type === 'path' ? userElement.path : mainInstance.defaults.baseURL + '\\' + userElement.path } target={'_blank'} className='userFile'>
+                  <i className="material-icons">
+                    { userElement.type === 'path' ? "insert_link" : "attach_file" }
+                  </i>
+                  <div className='userFilesNames' title={ userElement.originalname }>
+                    { userElement.originalname }
+                  </div>
+                  { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+                  <i className="material-icons" element_id = { userElement._id } onClick={(event) => deleteElementClick(event)}>
+                    clear
+                  </i> : null }
+                </Link>
+              )) : null}
+              { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+              <>
+                <button className="dropdown-trigger waves-effect waves-light btn col s8 offset-s2 addAttachments" data-target='attachmentsSwitch'>
+                  <i className='material-icons left'>add</i>
+                  Add attachments
+                </button>
+                <ul id='attachmentsSwitch' className='dropdown-content'>
+                  <li><a className="modal-trigger" href="#filesModal">Files</a></li>
+                  <li><a href="#!" onClick={() => dispatch(openForm())}>Link</a></li>
+                </ul>
+                <div id="filesModal" className="modal">
+                  <div className="modal-content">
+                    <h4>Add Files</h4>
+                    <div className="file-field input-field">
+                      <div className="btn">
+                        <span>
+                          <i className='material-icons'>file_upload</i>
+                        </span>
+                        <input type="file" onChange={(event) => fileInputOnChange(event)} multiple />
+                      </div>
+                      <div className="file-path-wrapper">
+                        <input className="file-path validate" type="text" placeholder="Upload one or more files"/>
+                      </div>
                     </div>
                   </div>
+                  <div className="modal-footer">
+                    <a href="#!" className="modal-close waves-effect waves-green btn-flat">Close</a>
+                  </div>
+                </div>
+              </> : null }
+            </div>
+            { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
+            <>
+              <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger" >
+                <i className="material-icons left">check</i>
+                Turn in
+              </button>
+              <div id="turnInModal" className="modal">
+                <div className="modal-content">
+                  <h4>Turn in?</h4>
                 </div>
                 <div className="modal-footer">
-                  <a href="#!" className="modal-close waves-effect waves-green btn-flat">Close</a>
+                  <a href="#!" className="modal-close waves-effect waves-green btn-flat">Cancel</a>
+                  <a href="#!" className="modal-close waves-effect waves-green btn-flat" onClick={() => turnInFunc()}>Turn in</a>
                 </div>
               </div>
-            </> : null }
+            </> : 
+            <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger red" onClick={() => cancelTurnInFunc()}>
+              <i className="material-icons left">clear</i>
+              Cancel
+            </button>}
           </div>
-          { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
-          <>
-            <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger" >
-              <i className="material-icons left">check</i>
-              Turn in
-            </button>
-            <div id="turnInModal" className="modal">
-              <div className="modal-content">
-                <h4>Turn in?</h4>
-              </div>
-              <div className="modal-footer">
-                <a href="#!" className="modal-close waves-effect waves-green btn-flat">Cancel</a>
-                <a href="#!" className="modal-close waves-effect waves-green btn-flat" onClick={() => turnInFunc()}>Turn in</a>
-              </div>
-            </div>
-          </> : 
-          <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger red" onClick={() => cancelTurnInFunc()}>
-            <i className="material-icons left">clear</i>
-            Cancel
-          </button>}
-        </div>
+        : null }
       </div>
       <div className="secondaryBlock">
 
