@@ -23,6 +23,15 @@ export const updateLesson = createAsyncThunk(
   }
 )
 
+export const deleteLesson = createAsyncThunk(
+  'editLesson/deleteLesson',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.delete(`/classes/${data.id}/${data.lessonId}`)
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const getLesson = createAsyncThunk(
   'editLesson/getLesson',
   async (data, { rejectWithValue }) => {
@@ -62,6 +71,9 @@ export const editLessonSlice = createSlice({
     },
     changeAttachments: (state, action) => {
       state.attachedElements[action.payload.id] = action.payload.url;
+    },
+    removeAttachment: (state, action) => {
+      delete state.attachedElements[action.payload.id];
     },
     changeExpires: (state, action) => {
       state.expires = action.payload;
@@ -117,9 +129,17 @@ export const editLessonSlice = createSlice({
         state.error.push(action.payload);
       }
     })
+    .addCase(deleteLesson.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
   }
 })
 
-export const { changeTitle, changeMark, changeDescription, changeType, changeFiles, changeAttachments, changeExpires, clearValues } = editLessonSlice.actions;
+export const { changeTitle, changeMark, changeDescription, changeType, changeFiles, changeAttachments, removeAttachment, changeExpires, clearValues } = editLessonSlice.actions;
 
 export default editLessonSlice.reducer;

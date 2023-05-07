@@ -10,7 +10,7 @@ import { CSSTransition } from 'react-transition-group';
 import Background from '../../components/Background/Background';
 import mainInstance from '../../api/mainInstance';
 import ReturnAnchor from '../../components/ReturnAnchor/ReturnAnchor';
-import { dateNormalize } from '../../api/dateNormalize';
+import { dateNormalize } from '../../utils/dateNormalize';
 
 export default function LessonInfo() {
 
@@ -120,7 +120,7 @@ export default function LessonInfo() {
       </div>
       <ReturnAnchor link={`${location.origin}/classes/${id}`} title={classTitle} secondaryContent={classDesription} />
       <div className="generalBlock row">
-        <div className="mainInfo col s12 m8 l9">
+        <div className="mainInfo col s12 m8 offset-m2 l10 offset-l1"> 
           <div className='mainTitleBlock row'>
             <div className='mainTitle col s9 l3'>
               { lessonInfo.lesson.title }

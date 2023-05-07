@@ -4,8 +4,8 @@ import './EditLesson.scss';
 import ReturnAnchor from "../../components/ReturnAnchor/ReturnAnchor";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { changeTitle, changeMark, changeDescription, changeType, changeExpires, changeFiles, changeAttachments, createLesson, getLesson, updateLesson, clearValues } from "../../redux/editLesson/editLessonSlice";
-import { dateNormalize } from "../../api/dateNormalize";
+import { changeTitle, changeMark, changeDescription, changeType, changeExpires, changeFiles, changeAttachments, createLesson, getLesson, updateLesson, clearValues, deleteLesson, removeAttachment } from "../../redux/editLesson/editLessonSlice";
+import { dateNormalize } from "../../utils/dateNormalize";
 
 export default function EditLesson() {
 
@@ -32,6 +32,10 @@ export default function EditLesson() {
       url: ''
     }));
   };
+
+  const removeUrlClick = (id) => {
+    dispatch(removeAttachment({ id }));
+  }
 
   let classTitle;
   let classDesription;
@@ -63,9 +67,22 @@ export default function EditLesson() {
         lesson
       }))
     }
-    console.log(editLessonState.expires);
     if(!editLessonState.error.length) {
-      navigate(-1);
+      navigate(`../classes/${id}`);
+    }
+  }
+
+  const deleteButtonClick = () => {
+    const message = window.confirm('Are you sure to delete this lesson?');
+    if(!message) {
+      return;
+    }
+    dispatch(deleteLesson({
+      id,
+      lessonId
+    }))
+    if(!editLessonState.error.length) {
+      navigate(`../classes/${id}`);
     }
   }
   
@@ -149,7 +166,7 @@ export default function EditLesson() {
             <input 
               id={`url-${index}`} 
               type="url" 
-              className="validate" 
+              className="validate col s11" 
               value={editLessonState.attachedElements[key]} 
               onChange={(event) => dispatch(changeAttachments({
                 id: index,
@@ -157,6 +174,7 @@ export default function EditLesson() {
               }))} 
             />
             <label htmlFor={`url-${index}`}>URL</label>
+            <i className="material-icons prefix col s1" onClick={() => removeUrlClick(key)}>close</i>
           </div>
         ))}
         <button 
@@ -190,6 +208,11 @@ export default function EditLesson() {
         <button className="btn waves-effect waves-light col s3" onClick={createButtonClick}>
           {lessonId ? `Update lesson` : `Create lesson`}
         </button>
+        { lessonId ? 
+          <button className="btn red waves-effect waves-light col s3 offset-s6" onClick={deleteButtonClick}>
+            DELETE
+          </button>
+        : null}
       </div>
     </div>
   )

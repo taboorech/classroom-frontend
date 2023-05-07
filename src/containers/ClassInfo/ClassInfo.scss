@@ -7,26 +7,26 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 0;
-  // align-items: center;
   @media (min-width: 600px) {
     border-radius: 0 0 5px 5px;
   }
   
-  .tools {
+  h4 {
     display: flex;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    padding-right: 0.5rem;
-    margin-bottom: 0;
-    i {
-      cursor: pointer;
-    }
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .tools {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+      margin-bottom: 0;
+      i {
+        cursor: pointer;
+      }
   }
 
-  // h4 {
-  //   margin-top: 0;
-  // }
+  }
 
   p {
     display: flex;

@@ -91,12 +91,12 @@ export default function ClassInfo(props) {
       null }
       <div className='row'>
         <div className={'general-info col s12 m8 offset-m2 blue-grey darken-1 white-text'}>
-          { classInfo.owner ?
-          <div className='tools'>
-            <i className="material-icons" onClick={() => dispatch(openForm())}>settings</i>
-          </div> : null }
-          <h4 style={{ marginTop: !classInfo.owner ? 1 + "rem" : 0 }} >
+          <h4>
             { classInfo.info.title }
+            { classInfo.owner ?
+            <div className='tools'>
+              <i className="material-icons" onClick={() => dispatch(openForm())}>settings</i>
+            </div> : null }
           </h4>
           <p>
             <span>

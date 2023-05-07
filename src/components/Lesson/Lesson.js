@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import './Lesson.scss';
-import { dateNormalize } from '../../api/dateNormalize';
+import { dateNormalize } from '../../utils/dateNormalize';
 
 export default function Lesson(props) {
   

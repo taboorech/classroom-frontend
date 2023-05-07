@@ -6,8 +6,8 @@
   display: flex;
   .mainInfo {
     min-height: 5rem;
+    width: auto;
     border: 1px solid darkgray;
-    border-right: none;
     .mainTitleBlock {
       display: flex;
       align-items: center;
@@ -57,6 +57,7 @@
 
   .filesBlock {
     border: 1px solid darkgray;
+    border-left: none;
     .userFilesBlock {
       a.userFile {
         display: flex;
