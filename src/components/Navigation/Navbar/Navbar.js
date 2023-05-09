@@ -4,7 +4,10 @@ import { Link, NavLink, useLocation, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import M from 'materialize-css';
 import { logout } from '../../../redux/auth/authSlice';
-import { setData, getClasses } from '../../../redux/classes/classesSlice';
+import { setData, getClasses, notificationBlockChange } from '../../../redux/classes/classesSlice';
+import NotificationsBlock from '../../NotificationsBlock/NotificationsBlock';
+import { CSSTransition } from 'react-transition-group';
+import Background from '../../Background/Background';
 
 export default function Navbar(props) {
 
@@ -41,12 +44,20 @@ export default function Navbar(props) {
           <Link to={'/'} className="brand-logo">Logo</Link>
           <a href="#!" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
           <ul className="right hide-on-med-and-down">
+            <li hidden={!auth.isAuth ? true : false} ><a href="#!" onClick={() => dispatch(notificationBlockChange())}><i className="material-icons right">{!!classes.notifications.student && !!classes.notifications.student ? 'notifications' : 'notifications_none'}</i></a></li>
             <li className={location.pathname === '/' ? 'active' : null} ><NavLink to={'/'}>Home</NavLink></li>
             <li hidden={!auth.isAuth ? true : false} ><a className="dropdown-trigger" href="#!" data-target="navbarDropdownMenu">Classes<i className="material-icons right">arrow_drop_down</i></a></li>
             <li><NavLink to={'/auth'} onClick={auth.isAuth ? () => {dispatch(logout()); dispatch(setData())} : null} >{ auth.isAuth ? "Logout" : "Login" }</NavLink></li>
           </ul>
         </div>
       </nav>
+      <NotificationsBlock open = {classes.notificationBlockOpen} />
+      <CSSTransition in={classes.notificationBlockOpen} mountOnEnter unmountOnExit timeout={{
+        enter: 700,
+        exit: 700
+      }}>
+        <Background onClick={() => dispatch(notificationBlockChange())} /> 
+      </CSSTransition>
 
       <ul className="sidenav" id="mobile-demo">
         <li className={location.pathname === '/' ? 'active' : null} ><NavLink to={'/'}>Home</NavLink></li>

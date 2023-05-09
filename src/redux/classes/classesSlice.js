@@ -35,6 +35,11 @@ export const classesSlice = createSlice({
   name: 'classes',
   initialState: {
     classes: [],
+    notifications: {
+      student: [],
+      teacher: []
+    },
+    notificationBlockOpen: false,
     createClassTitle: '',
     createClassDescription: '',
     accessTokenInput: '',
@@ -57,12 +62,16 @@ export const classesSlice = createSlice({
     },
     clearErrors: (state) => {
       state.error = [];
+    },
+    notificationBlockChange: (state) => {
+      state.notificationBlockOpen = !state.notificationBlockOpen;
     }
   },
   extraReducers: builder => {
     builder
     .addCase(getClasses.fulfilled, (state, action) => {
-      state.classes = [...action.payload];
+      state.classes = [...action.payload.classes];
+      state.notifications = {...action.payload.notifications};
       state.error = [];
     })
     .addCase(getClasses.rejected, (state, action) => {
@@ -100,6 +109,6 @@ export const classesSlice = createSlice({
   }
 })
 
-export const { setData, changeTitle, changeDesription, changeAccessTokenInput, clearErrors } = classesSlice.actions;
+export const { setData, changeTitle, changeDesription, changeAccessTokenInput, clearErrors, notificationBlockChange } = classesSlice.actions;
 
 export default classesSlice.reducer;

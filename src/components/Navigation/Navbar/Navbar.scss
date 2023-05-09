@@ -1,4 +1,6 @@
 nav {
+  position: relative;
+  z-index: 150;
   .brand-logo {
     @media(min-width: 992px) {
       margin-left: 2rem;

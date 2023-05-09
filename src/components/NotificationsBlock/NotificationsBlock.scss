@@ -1,0 +1,19 @@
+.NotificationsBlock {
+  // display: none;
+  position: absolute;
+  background: #FFF;
+  width: 30%;
+  top: -100%;
+  right: 8rem;
+  height: 15rem;
+  z-index: 100;
+  transition: all ease-in-out .7s;
+  .row {
+    div {
+      overflow-y: auto;
+    }
+  }
+  &.open {
+    top: 4.2rem;
+  }
+}
