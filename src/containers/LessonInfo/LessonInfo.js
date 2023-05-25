@@ -57,7 +57,6 @@ export default function LessonInfo() {
   }
 
   const urlInputConfirm = (event) => {
-    console.log(event);
     let attachedElements = new FormData();
     attachedElements.append('attachedElements', lessonInfo.urlInput);
     dispatch(uploadFiles({

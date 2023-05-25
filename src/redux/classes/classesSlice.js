@@ -31,12 +31,30 @@ export const connectToClass = createAsyncThunk(
   }
 )
 
+export const deleteNotifications = createAsyncThunk(
+  'classes/deleteNotifications',
+  async (data, { rejectWithValue }) => {
+    return await mainInstance.patch(`/auth/deleteNotifications`, {
+      notificationId: data.notification,
+      type: data.type
+    })
+    .then((response) => response.data)
+    .catch((error) => rejectWithValue(error.response.data.message))
+  }
+)
+
 export const classesSlice = createSlice({
   name: 'classes',
   initialState: {
     classes: [],
     notifications: {
-      student: [],
+      student: [{
+        _id: 'dfff',
+        message: 'fff'
+      }, {
+        _id: '123',
+        message: '211'
+      }],
       teacher: []
     },
     notificationBlockOpen: false,
@@ -65,13 +83,18 @@ export const classesSlice = createSlice({
     },
     notificationBlockChange: (state) => {
       state.notificationBlockOpen = !state.notificationBlockOpen;
+    },
+    deleteStateNotifications: (state, action) => {
+      let notifications = state.notifications;
+      notifications = notifications[action.payload.type].filter(({_id}) => _id.toString() !== action.payload._id);
+      state.notifications[action.payload.type] = notifications;
     }
   },
   extraReducers: builder => {
     builder
     .addCase(getClasses.fulfilled, (state, action) => {
       state.classes = [...action.payload.classes];
-      state.notifications = {...action.payload.notifications};
+      // state.notifications = {...action.payload.notifications};
       state.error = [];
     })
     .addCase(getClasses.rejected, (state, action) => {
@@ -106,9 +129,17 @@ export const classesSlice = createSlice({
         state.error.push(action.payload);
       }
     })
+    .addCase(deleteNotifications.rejected, (state, action) => {
+      if(Array.isArray(action.payload) && action.payload.length > 1) {
+        state.error = [...action.payload];
+      } else {
+        state.error = [];
+        state.error.push(action.payload);
+      }
+    })
   }
 })
 
-export const { setData, changeTitle, changeDesription, changeAccessTokenInput, clearErrors, notificationBlockChange } = classesSlice.actions;
+export const { setData, changeTitle, changeDesription, changeAccessTokenInput, clearErrors, notificationBlockChange, deleteStateNotifications } = classesSlice.actions;
 
 export default classesSlice.reducer;

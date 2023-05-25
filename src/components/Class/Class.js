@@ -7,7 +7,11 @@ export default function Class(props) {
       return props.lessons.map((lesson, index) => {
         if(lesson.expires && (+lesson.expires < (Date.now() + 3600 * 24 * 7) && +lesson.expires > Date.now()) && index <= 4) {
           return(
-            <Link key={`lesson-${index}`} to={'/classes/' + props.classId + '/' + lesson._id} className={'s12 missed'}>
+            <Link 
+              key={`lesson-${index}`} 
+              to={'/classes/' + props.classId + '/' + lesson._id} 
+              className={'s12 missed'}
+            >
               { lesson.title }
             </Link>
           )
