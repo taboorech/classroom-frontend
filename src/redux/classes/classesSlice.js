@@ -48,13 +48,7 @@ export const classesSlice = createSlice({
   initialState: {
     classes: [],
     notifications: {
-      student: [{
-        _id: 'dfff',
-        message: 'fff'
-      }, {
-        _id: '123',
-        message: '211'
-      }],
+      student: [],
       teacher: []
     },
     notificationBlockOpen: false,
@@ -94,7 +88,7 @@ export const classesSlice = createSlice({
     builder
     .addCase(getClasses.fulfilled, (state, action) => {
       state.classes = [...action.payload.classes];
-      // state.notifications = {...action.payload.notifications};
+      state.notifications = {...action.payload.notifications};
       state.error = [];
     })
     .addCase(getClasses.rejected, (state, action) => {

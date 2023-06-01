@@ -23,7 +23,7 @@ export default function Class(props) {
 
   return (
     <div className="Class col s12 m4 l3 sample">
-      <div className="card blue-grey darken-1">
+      <div className="card">
         <Link to={`/classes/${props.classId}`}>
           <div className="card-content white-text">
             <span className="card-title">{ props.title }</span>

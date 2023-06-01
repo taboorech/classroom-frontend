@@ -7,8 +7,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: #5E34FA;
   @media (min-width: 600px) {
-    border-radius: 0 0 5px 5px;
+    margin-top: 2.5rem;
+    border-radius: 5px;
   }
   
   h4 {
@@ -42,6 +44,9 @@
   .create-lesson-block {
     margin-top: 2rem;
     margin-bottom: 2rem;
+    a {
+      background: #4CFAAE;
+    }
   }
 
   .collection {
@@ -53,10 +58,16 @@
   overflow-x: scroll;
 }
 
-.tab {
-  a {
-    i {
-      margin: 0.7rem;
+li {
+  &.tab {
+    a {
+      color: #5E34FA !important;
+      i {
+        margin: 0.7rem;
+      }
     }
+  }
+  &.indicator {
+    background: #5E34FA !important;
   }
 }

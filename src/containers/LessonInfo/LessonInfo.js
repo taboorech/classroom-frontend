@@ -95,6 +95,10 @@ export default function LessonInfo() {
     }))
   }
 
+  useEffect(() => {
+    document.title = lessonInfo.lesson?.title;
+  }, [lessonInfo.lesson])
+
   return (
     lessonInfo.lesson ?
     <>
@@ -196,7 +200,7 @@ export default function LessonInfo() {
             </div>
             { lessonInfo.userElements !== null && (lessonInfo.userElements === undefined || !lessonInfo.userElements.turnIn) ?
             <>
-              <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger" >
+              <button data-target="turnInModal" className="waves-effect waves-light btn col s12 l8 offset-l2 modal-trigger turnIn" >
                 <i className="material-icons left">check</i>
                 Turn in
               </button>

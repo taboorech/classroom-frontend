@@ -19,7 +19,6 @@ export default function ClassInfo(props) {
   const classInfo = useSelector((state) => state.classInfo);
   const createForm = useSelector((state) => state.createForm);
   const QRFormState = useSelector((state) => state.QRForm);
-  const location = window.location;
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -34,10 +33,17 @@ export default function ClassInfo(props) {
   }, [dispatch, id])
 
   useEffect(() => {
+    M.updateTextFields();
+  })
+  
+  useEffect(() => {
     const tabs = document.querySelectorAll('.tabs');
     M.Tabs.init(tabs);
-    M.updateTextFields();
   }, [])
+
+  useEffect(() => {
+    document.title = classInfo.info.title;
+  }, [classInfo.info.title])
 
   useEffect(() => {
     const tabs = document.querySelectorAll('.tabs');
@@ -90,7 +96,7 @@ export default function ClassInfo(props) {
         </div> : 
       null }
       <div className='row'>
-        <div className={'general-info col s12 m8 offset-m2 blue-grey darken-1 white-text'}>
+        <div className={'general-info col s12 m8 offset-m2 white-text'}>
           <h4>
             { classInfo.info.title }
             { classInfo.owner ?
@@ -131,7 +137,7 @@ export default function ClassInfo(props) {
           <div id="lessonsBlock" className="col s12">
             { classInfo.owner ?
             <div className='row create-lesson-block' >
-              <Link to={`${location.href}/edit`} className="col s10 offset-s1 m8 offset-m2 l6 offset-l3 waves-effect waves-light btn create-button">Create new exercise</Link>
+              <Link to={`./edit`} className="col s10 offset-s1 m8 offset-m2 l6 offset-l3 waves-effect waves-light btn create-button">Create new exercise</Link>
             </div> : null }
             <div className="collection z-depth-1">
               { classInfo.info.lessons ? classInfo.info.lessons.map((lesson, index) => (

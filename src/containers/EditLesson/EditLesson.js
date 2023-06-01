@@ -100,6 +100,10 @@ export default function EditLesson() {
   })
 
   useEffect(() => {
+    document.title = editLessonState.title;
+  }, [editLessonState.title])
+
+  useEffect(() => {
     if(!!lessonId) {
       dispatch(getLesson({
         id,
@@ -178,13 +182,13 @@ export default function EditLesson() {
           </div>
         ))}
         <button 
-          className="btn waves-effect waves-light col s3 offset-s9"
+          className="btn waves-effect waves-light col s3 offset-s9 add-url"
           onClick={() => addUrlClick()}
         >Add url</button>
       </div>
       <div className="col l6 m8 offset-m2 s12 offset-l3">
         <div className="file-field input-field col s12">
-          <div className="btn">
+          <div className="btn add-files">
             <span>Files</span>
             <input type="file" multiple onChange={(event) => fileInputOnChange(event)} />
           </div>
@@ -205,7 +209,7 @@ export default function EditLesson() {
         </div>
       </div>
       <div className="col l6 m8 offset-m2 s12 offset-l3">
-        <button className="btn waves-effect waves-light col s3" onClick={createButtonClick}>
+        <button className="btn waves-effect waves-light col s3 create-button" onClick={createButtonClick}>
           {lessonId ? `Update lesson` : `Create lesson`}
         </button>
         { lessonId ? 

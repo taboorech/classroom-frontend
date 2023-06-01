@@ -1,0 +1,31 @@
+input {
+  &.valid {
+    border-bottom: #4CFAAE !important;
+    box-shadow: 0 2px 0 0 #4CFAAE !important;
+    &:focus {
+      +label {
+        color: #4CFAAE !important;
+      }
+    }
+  }
+}
+
+.btn[class*="create"], .btn[class*="add"], .btn[class*="turnIn"], .btn.log-reg {
+  background: #4CFAAE;
+}
+
+.green-text {
+  color: #4CFAAE !important;
+}
+
+.collection-item {
+  &.active {
+    background: #3EA7ED !important;
+  }
+  &:not(.active) {
+    color: #3EA7ED!important;
+    >.secondary-content {
+      color: #3EA7ED !important;
+    }
+  }
+}

@@ -19,6 +19,7 @@ export default function Classes(props) {
   const queryParams = new URLSearchParams(location.search).get('accessToken');
 
   useEffect(() => {
+    document.title = "Classes";
     const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
     const modals = document.querySelectorAll('.modal');
     const modalObj = M.Modal.getInstance(modals);
@@ -69,7 +70,7 @@ export default function Classes(props) {
           </div>
         </CreateForm>
         <button
-          className="dropdown-trigger btn-floating waves-effect waves-light right-align red create-class-button"
+          className="dropdown-trigger btn-floating waves-effect waves-light right-align create-class-button"
           data-target= {'classesActions'}
         >
           <i className="material-icons">add</i>

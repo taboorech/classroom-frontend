@@ -47,7 +47,7 @@ export default function Navbar(props) {
             <li hidden={!auth.isAuth ? true : false} ><a href="#!" onClick={() => dispatch(notificationBlockChange())}><i className="material-icons right">{!!classes.notifications.student && !!classes.notifications.student ? 'notifications' : 'notifications_none'}</i></a></li>
             <li className={location.pathname === '/' ? 'active' : null} ><NavLink to={'/'}>Home</NavLink></li>
             <li hidden={!auth.isAuth ? true : false} ><a className="dropdown-trigger" href="#!" data-target="navbarDropdownMenu">Classes<i className="material-icons right">arrow_drop_down</i></a></li>
-            <li><NavLink to={'/auth'} onClick={auth.isAuth ? () => {dispatch(logout()); dispatch(setData())} : null} >{ auth.isAuth ? "Logout" : "Login" }</NavLink></li>
+            <li><NavLink to={'/auth'} onClick={!!localStorage.getItem('accessToken') ? () => {dispatch(logout()); dispatch(setData())} : null} >{ auth.isAuth ? "Logout" : "Login" }</NavLink></li>
           </ul>
         </div>
       </nav>

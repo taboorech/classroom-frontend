@@ -47,7 +47,6 @@ export default function LessonCheck() {
       } else {
         const message = window.confirm(`Are you agree to make an assessment?`);
         if(message) {
-          console.log(lessonCheck);
           dispatch(makeAssessment({
             id,
             lessonId,
@@ -101,6 +100,10 @@ export default function LessonCheck() {
   useEffect(() => {
     M.updateTextFields();
   })
+
+  useEffect(() => {
+    document.title = lessonCheck.lesson?.title;
+  }, [lessonCheck.lesson])
 
   useEffect(() => {
     const turnIn = lessonCheck.works.find((work) => work.user._id === userId);
@@ -195,7 +198,7 @@ export default function LessonCheck() {
               </div>
             </div>
             <button 
-              className="waves-effect waves-light btn col offset-s1"
+              className="waves-effect waves-light btn col offset-s1 add-edit-mark"
               input_id = {`mark${userId}Value`}
               onClick={(event) => rateButtonClick(event)}
               disabled={!lessonCheck.turnIn && lessonCheck[`mark${userId}Value`] === ""}

@@ -1,6 +1,5 @@
 import { useDispatch } from 'react-redux';
 import { addOwner, removeOwner, removeFromClassroom } from '../../redux/classInfo/classInfoSlice';
-import { Link } from 'react-router-dom';
 import './UserList.scss';
 
 export default function UserList(props) {
@@ -47,9 +46,9 @@ export default function UserList(props) {
           { `${member.surname} ${member.name}` }
           { isOwner ?
           <div className="secondary-content members">
-            <Link to="#!" className="green-text tooltipped" a-position="bottom" data-tooltip="Check user works">
+            {/* <Link to="#!" className="green-text tooltipped" a-position="bottom" data-tooltip="Check user works">
               <i className="material-icons">check_box</i>
-            </Link>
+            </Link> */}
             <a href="#!" className="green-text tooltipped" onClick={() => addOwnerOnClick(member._id)} a-position="bottom" data-tooltip="Raise to owners">
               <i className="material-icons">arrow_upward</i>
             </a>

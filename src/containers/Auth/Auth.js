@@ -5,6 +5,7 @@ import { changeEmail, changeRegEmail, changePassword, changeRegPassword, changeC
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import './Auth.scss';
 
 export default function Auth(props) {
 
@@ -21,9 +22,13 @@ export default function Auth(props) {
     M.updateTextFields();
   })
 
+  useEffect(() => {
+    document.title = "Authorization";
+  }, []);
+
   return (
     <>
-      <div className="row">
+      <div className="Auth row">
         <div className="col s12">
           <ul className="tabs">
             <li className="tab col s6 l3 offset-l3"><a href="#login">Login</a></li>

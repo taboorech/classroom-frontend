@@ -1,5 +1,4 @@
 .NotificationsBlock {
-  // display: none;
   position: absolute;
   background: #FFF;
   width: 30%;
@@ -8,6 +7,16 @@
   height: 15rem;
   z-index: 100;
   transition: all ease-in-out .7s;
+  li {
+    &.tab {
+      a {
+      color: #2D4FD6 !important;
+      }
+    }
+    &.indicator {
+      background: #2D4FD6;
+    }
+  }
   .row {
     div {
       overflow-y: auto;

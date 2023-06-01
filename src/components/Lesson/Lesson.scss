@@ -6,7 +6,7 @@
     display: flex;
     position: relative;
     justify-content: space-between;
-    z-index: 2;
+    z-index: 1;
     align-items: center;
     margin: 1rem 0.5rem;
     padding: 0 0.5rem 0 0.5rem;
@@ -40,7 +40,7 @@
       flex-direction: column;
       position: relative;
       transition-duration: 2s;
-      margin-top: -100%;
+      margin-top: -200%;
       .descrription-block {
         text-align: justify;
       }
@@ -49,11 +49,17 @@
         margin-top: 1rem;
         flex-direction: column;
         text-align: justify;
+        a {
+          color: #3EA7ED;
+        }
       }
       .button-block {
         margin-top: 2rem;
         margin-left: 0rem;
         margin-bottom: 0;
+        a {
+          background: #4CFAAE;
+        }
       }
     }
   }
@@ -61,7 +67,7 @@
   &.active {
     .title-block {
       padding-bottom: 0.7rem;
-      border-bottom: 1px solid red;
+      border-bottom: 1px solid #2DD6D6;
     }
     .lesson-body {
       .lesson-body-content {
